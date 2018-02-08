@@ -83,10 +83,10 @@ extension ObservableType {
                         flush(true)
                     })
                 
-                disposable.insert(d)
+                let _ = disposable.insert(d)
             })
             
-            disposable.insert(subscriptionDisposable)
+            let _ = disposable.insert(subscriptionDisposable)
             
             return disposable
         }
