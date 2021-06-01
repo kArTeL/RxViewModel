@@ -18,13 +18,13 @@ Long story short: a blatant «imitation» of `ReactiveViewModel `using `RxCocoa`
   s.source           = { :git => "https://github.com/RxSwiftCommunity/RxViewModel.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/esttorhe'
 
-  s.ios.deployment_target  = '8.0'
+  s.ios.deployment_target  = '12.0'
   s.osx.deployment_target = '10.10'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
   s.requires_arc = true
 
   s.source_files = 'Source/*.swift', 'Source/Categories/*.swift'
-  s.dependency 'RxSwift', '4.0.0'
+  s.dependency 'RxSwift', '6.2.0'
   s.frameworks = 'Foundation'
 end

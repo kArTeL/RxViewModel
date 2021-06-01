@@ -36,59 +36,59 @@ import RxSwift
  returns `true`. Completion and errors are always forwarded immediately.
  */
 extension ObservableType {
-    public func throttle(interval: TimeInterval, valuesPassingTest predicate: @escaping (E) -> Bool) -> Observable<E> {
-        return Observable.create { (o: AnyObserver<E>) -> Disposable in
-            let disposable = CompositeDisposable()
-            let scheduler = ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global())
-            let nextDisposable = SerialDisposable()
-            var hasNextValue = false
-            var nextValue: E?
-            let parent = self.asObservable()
-            
-            let subscriptionDisposable = parent.subscribe(onNext: {
-                /**
-                 Disposes the «last» `next` subscription if there was a previous value it gets
-                 flushed to the observable `o`.
-                 
-                 - parameter send: 	`Bool` flag indicating where or not the `next` value should be
-                 «flushed» to the `observable` `o` or not.
-                 */
-                func flushNext(_ send: Bool) -> Void {
-                    nextDisposable.dispose()
-                    
-                    guard let nV = nextValue, hasNextValue == true && send == true
-                        else { return }
-                    
-                    nextValue = nil
-                    hasNextValue = false
-                    
-                    o.on(.next(nV))
-                }
-                
-                let shouldThrottle = predicate($0)
-                flushNext(false)
-                
-                if !shouldThrottle {
-                    o.on(.next($0))
-                    
-                    return
-                }
-                
-                hasNextValue = true
-                nextValue = $0
-                
-                let flush = flushNext
-                let d = Observable<Int64>.timer(interval, scheduler: scheduler)
-                    .subscribe(onNext: { _ in
-                        flush(true)
-                    })
-                
-                let _ = disposable.insert(d)
-            })
-            
-            let _ = disposable.insert(subscriptionDisposable)
-            
-            return disposable
-        }
-    }
+//    public func throttle(interval: TimeInterval, valuesPassingTest predicate: @escaping (T) -> Bool) -> Observable<T> {
+//        return Observable.create { (o: AnyObserver<T>) -> Disposable in
+//            let disposable = CompositeDisposable()
+//            let scheduler = ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global())
+//            let nextDisposable = SerialDisposable()
+//            var hasNextValue = false
+//            var nextValue: T?
+//            let parent = self.asObservable()
+//            
+//            let subscriptionDisposable = parent.subscribe(onNext: {
+//                /**
+//                 Disposes the «last» `next` subscription if there was a previous value it gets
+//                 flushed to the observable `o`.
+//                 
+//                 - parameter send: 	`Bool` flag indicating where or not the `next` value should be
+//                 «flushed» to the `observable` `o` or not.
+//                 */
+//                func flushNext(_ send: Bool) -> Void {
+//                    nextDisposable.dispose()
+//                    
+//                    guard let nV = nextValue, hasNextValue == true && send == true
+//                        else { return }
+//                    
+//                    nextValue = nil
+//                    hasNextValue = false
+//                    
+//                    o.on(.next(nV))
+//                }
+//                
+//                let shouldThrottle = predicate($0)
+//                flushNext(false)
+//                
+//                if !shouldThrottle {
+//                    o.on(.next($0))
+//                    
+//                    return
+//                }
+//                
+//                hasNextValue = true
+//                nextValue = $0
+//                
+//                let flush = flushNext
+//                let d = Observable<Int64>.timer(interval, scheduler: scheduler)
+//                    .subscribe(onNext: { _ in
+//                        flush(true)
+//                    })
+//                
+//                let _ = disposable.insert(d)
+//            })
+//            
+//            let _ = disposable.insert(subscriptionDisposable)
+//            
+//            return disposable
+//        }
+//    }
 }

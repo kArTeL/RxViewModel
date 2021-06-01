@@ -18,7 +18,7 @@ import RxSwift
  */
 open class RxViewModel: NSObject {
     // MARK: Constants
-    let throttleTime: TimeInterval = 2
+    let throttleTime = RxTimeInterval.seconds(2)
     
     // MARK: Properties
     /// Scope dispose to avoid leaking
@@ -145,7 +145,7 @@ open class RxViewModel: NSObject {
         
         let result = ReplaySubject<T>.create(bufferSize: 1)
         
-        let activeSignal = self.activeObservable.takeUntil(Observable.create { (o: AnyObserver<T>) -> Disposable in
+        let activeSignal = self.activeObservable.take(until: Observable.create { (o: AnyObserver<T>) -> Disposable in
             observable.subscribe(onCompleted: {
                 defer { result.dispose() }
                 

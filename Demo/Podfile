@@ -13,11 +13,11 @@ def library
 end
 
 target 'Demo' do
-  platform :ios, '9.0'
+  platform :ios, '12.0'
   library
 
   target 'RxViewModelTests-iOS' do
-      platform :ios, '9.0'
+      platform :ios, '12.0'
       inherit! :search_paths
 
       test_pods
@@ -25,7 +25,7 @@ target 'Demo' do
 end
 
 target 'RxViewModelTests-tvOS' do
-    platform :tvos, '9.0'
+    platform :tvos, '12.0'
     library
 
     test_pods
