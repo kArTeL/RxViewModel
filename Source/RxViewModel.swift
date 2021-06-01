@@ -3,6 +3,7 @@
 //  RxViewModel
 //
 //  Created by Esteban Torres on 7/14/15.
+//  Maintened by Neil García on 1/1/2016
 //  Copyright (c) 2015 Esteban Torres. All rights reserved.
 //
 
@@ -144,8 +145,7 @@ open class RxViewModel: NSObject {
     public func throttleSignalWhileInactive<T>(observable: Observable<T>) -> Observable<T> {
         
         let result = ReplaySubject<T>.create(bufferSize: 1)
-        
-        let activeSignal = self.activeObservable.take(until: Observable.create { (o: AnyObserver<T>) -> Disposable in
+        let activeSignal = self.activeObservable.takeUntil(Observable.create { (o: AnyObserver<T>) -> Disposable in
             observable.subscribe(onCompleted: {
                 defer { result.dispose() }
                 
